@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnamen Adu Cepat Wujud Zat - IPAS Kelas 4 SD (PID Edition)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 40%, #4f46e5 100%);
+            min-height: 100vh;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .font-game {
+            font-family: 'Fredoka', cursive;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+        }
+        .btn-bounce:active {
+            transform: scale(0.93);
+        }
+        .buzzer-glow-left {
+            animation: pulse-left 0.8s infinite alternate;
+        }
+        .buzzer-glow-right {
+            animation: pulse-right 0.8s infinite alternate;
+        }
+        @keyframes pulse-left {
+            0% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.8); transform: scale(1); }
+            100% { box-shadow: 0 0 35px rgba(37, 99, 235, 1); transform: scale(1.03); }
+        }
+        @keyframes pulse-right {
+            0% { box-shadow: 0 0 15px rgba(225, 29, 72, 0.8); transform: scale(1); }
+            100% { box-shadow: 0 0 35px rgba(225, 29, 72, 1); transform: scale(1.03); }
+        }
+        kbd {
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+        }
+        .toast-pop {
+            animation: toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 p-2 md:p-4 justify-between">
+
+    <!-- Header Title -->
+    <header class="text-center my-1 md:my-2">
+        <div class="inline-flex items-center gap-3 bg-white/95 px-6 py-2.5 rounded-full shadow-2xl border-4 border-amber-400">
+            <i class="fa-solid fa-bolt-lightning text-2xl md:text-3xl text-amber-500 animate-bounce"></i>
+            <h1 class="text-xl md:text-3xl font-game font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800">
+                TURNAMEN ADU CEPAT: WUJUD ZAT
+            </h1>
+            <i class="fa-solid fa-flask text-2xl md:text-3xl text-indigo-600 animate-pulse"></i>
+        </div>
+        <p class="text-white text-xs font-bold mt-1.5 drop-shadow">Media Pembelajaran Interaktif IPAS Kelas 4 SD • Mode Papan Interaktif Digital (PID)</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center my-2">
+        
+        <!-- View 1: Setup View -->
+        <section id="view-setup" class="w-full max-w-3xl glass-card rounded-3xl p-5 md:p-8">
+            <div class="text-center mb-5">
+                <span class="bg-amber-100 text-amber-900 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest border border-amber-300">🎮 Mode Layar Sentuh PID (4 Kelompok)</span>
+                <h2 class="text-2xl md:text-3xl font-game font-bold text-indigo-950 mt-2">🏆 Persiapan Turnamen Kelas</h2>
+                <p class="text-slate-600 font-semibold text-xs md:text-sm">Masukkan nama 4 kelompok peserta didik yang akan bertanding!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-2xl border-2 border-blue-200">
+                    <label class="block font-bold text-blue-900 text-sm mb-1"><i class="fa-solid fa-users text-blue-600 mr-2"></i>Kelompok 1 (Sesi 1 - Tim Kiri PID)</label>
+                    <input type="text" id="input-team-1" value="Kelompok 1 (Garuda)" class="w-full px-4 py-2 rounded-xl border-2 border-blue-300 focus:outline-none focus:border-blue-600 font-bold text-slate-800 text-base">
+                </div>
+                <div class="bg-rose-50 p-4 rounded-2xl border-2 border-rose-200">
+                    <label class="block font-bold text-rose-900 text-sm mb-1"><i class="fa-solid fa-users text-rose-600 mr-2"></i>Kelompok 2 (Sesi 1 - Tim Kanan PID)</label>
+                    <input type="text" id="input-team-2" value="Kelompok 2 (Rajawali)" class="w-full px-4 py-2 rounded-xl border-2 border-rose-300 focus:outline-none focus:border-rose-600 font-bold text-slate-800 text-base">
+                </div>
+                <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-200">
+                    <label class="block font-bold text-amber-900 text-sm mb-1"><i class="fa-solid fa-users text-amber-600 mr-2"></i>Kelompok 3 (Sesi 2 - Tim Kiri PID)</label>
+                    <input type="text" id="input-team-3" value="Kelompok 3 (Harimau)" class="w-full px-4 py-2 rounded-xl border-2 border-amber-300 focus:outline-none focus:border-amber-600 font-bold text-slate-800 text-base">
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-200">
+                    <label class="block font-bold text-emerald-900 text-sm mb-1"><i class="fa-solid fa-users text-emerald-600 mr-2"></i>Kelompok 4 (Sesi 2 - Tim Kanan PID)</label>
+                    <input type="text" id="input-team-4" value="Kelompok 4 (Singa)" class="w-full px-4 py-2 rounded-xl border-2 border-emerald-300 focus:outline-none focus:border-emerald-600 font-bold text-slate-800 text-base">
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 p-4 rounded-2xl border-2 border-indigo-200 mb-6 space-y-2 text-xs md:text-sm text-indigo-950">
+                <div class="font-black text-indigo-900 flex items-center gap-2 text-sm md:text-base">
+                    <i class="fa-solid fa-gamepad text-amber-500"></i> Aturan Layar PID & Turnamen:
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-semibold">
+                    <div>• <strong>Format Match:</strong> 10 Soal per Sesi (Sesi 1, Sesi 2, & Final).</div>
+                    <div>• <strong>Tata Letak PID:</strong> Tim Kiri menjawab di Panel Kiri, Tim Kanan di Panel Kanan.</div>
+                    <div>• <strong>Adu Kecepatan Bel:</strong> Sentuh Bel PID atau tekan <kbd class="bg-white border px-1 rounded shadow-sm">A</kbd> (Kiri) & <kbd class="bg-white border px-1 rounded shadow-sm">L</kbd> (Kanan).</div>
+                    <div>• <strong>Alur Cepat:</strong> Jawaban benar/curi poin langsung lanjut ke soal berikutnya. Penjelasan materi ditampilkan lengkap setelah sesi permainan!</div>
+                </div>
+            </div>
+
+            <button onclick="startTournament()" class="w-full py-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 text-white font-game text-xl md:text-2xl rounded-2xl shadow-xl border-b-4 border-emerald-800 transition transform hover:-translate-y-1 btn-bounce flex items-center justify-center gap-3 cursor-pointer">
+                <i class="fa-solid fa-play text-yellow-300"></i> MULAI TURNAMEN KELAS
+            </button>
+        </section>
+
+        <!-- View 2: Bracket View -->
+        <section id="view-bracket" class="w-full max-w-4xl glass-card rounded-3xl p-5 md:p-8 hidden">
+            <div class="text-center mb-4">
+                <h2 class="text-2xl md:text-3xl font-game font-bold text-indigo-950">📊 Bagan Turnamen IPAS Kelas 4</h2>
+                <p id="bracket-status-text" class="text-slate-600 font-bold text-xs md:text-sm">10 Soal per Pertandingan • Babak Semifinal & Final Championship</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center my-4">
+                <!-- Semifinal 1 Card -->
+                <div class="space-y-3 bg-white/90 p-4 rounded-2xl border-2 border-indigo-100 shadow-md">
+                    <div class="text-center font-black text-xs text-indigo-800 bg-indigo-100 py-1 rounded-full tracking-wider">SESI 1 • SEMIFINAL</div>
+                    <div id="card-semi1-a" class="p-3 bg-white rounded-xl border-2 border-slate-200 shadow-sm font-bold text-slate-800 flex justify-between items-center">
+                        <span id="name-semi1-a">Kelompok 1</span>
+                        <span id="score-semi1-a" class="bg-indigo-50 text-indigo-800 px-3 py-1 rounded-lg text-xs font-black">0 Pts</span>
+                    </div>
+                    <div id="card-semi1-b" class="p-3 bg-white rounded-xl border-2 border-slate-200 shadow-sm font-bold text-slate-800 flex justify-between items-center">
+                        <span id="name-semi1-b">Kelompok 2</span>
+                        <span id="score-semi1-b" class="bg-indigo-50 text-indigo-800 px-3 py-1 rounded-lg text-xs font-black">0 Pts</span>
+                    </div>
+                    <button id="btn-play-semi1" onclick="launchMatch('semi1')" class="w-full py-3 bg-blue-600 text-white font-game text-base md:text-lg rounded-xl shadow-md hover:bg-blue-700 transition btn-bounce flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-bolt text-yellow-300"></i> Main Sesi 1 (10 Soal)
+                    </button>
+                </div>
+
+                <!-- Trophy Final Stage -->
+                <div class="text-center flex flex-col items-center justify-center my-2 md:my-0">
+                    <div class="relative">
+                        <i class="fa-solid fa-trophy text-6xl md:text-7xl text-amber-400 drop-shadow-lg animate-pulse"></i>
+                        <i class="fa-solid fa-crown text-2xl md:text-3xl text-yellow-300 absolute -top-4 left-1/2 transform -translate-x-1/2"></i>
+                    </div>
+                    <span class="font-game text-lg md:text-xl font-bold text-amber-800 mt-2">BABAK FINAL CHAMPIONSHIP</span>
+                    <div id="final-match-display" class="w-full mt-2 p-3 bg-amber-50 rounded-2xl border-2 border-amber-300 text-amber-950 font-bold text-xs text-center shadow-inner">
+                        Menunggu Pemenang Sesi 1 & Sesi 2...
+                    </div>
+                    <button id="btn-play-final" onclick="launchMatch('final')" class="w-full mt-3 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-game text-base md:text-lg rounded-xl shadow-lg hover:from-amber-600 hover:to-yellow-600 transition btn-bounce hidden cursor-pointer">
+                        🔥 MULAI BABAK FINAL (10 SOAL) 🔥
+                    </button>
+                </div>
+
+                <!-- Semifinal 2 Card -->
+                <div class="space-y-3 bg-white/90 p-4 rounded-2xl border-2 border-indigo-100 shadow-md">
+                    <div class="text-center font-black text-xs text-indigo-800 bg-indigo-100 py-1 rounded-full tracking-wider">SESI 2 • SEMIFINAL</div>
+                    <div id="card-semi2-a" class="p-3 bg-white rounded-xl border-2 border-slate-200 shadow-sm font-bold text-slate-800 flex justify-between items-center">
+                        <span id="name-semi2-a">Kelompok 3</span>
+                        <span id="score-semi2-a" class="bg-indigo-50 text-indigo-800 px-3 py-1 rounded-lg text-xs font-black">0 Pts</span>
+                    </div>
+                    <div id="card-semi2-b" class="p-3 bg-white rounded-xl border-2 border-slate-200 shadow-sm font-bold text-slate-800 flex justify-between items-center">
+                        <span id="name-semi2-b">Kelompok 4</span>
+                        <span id="score-semi2-b" class="bg-indigo-50 text-indigo-800 px-3 py-1 rounded-lg text-xs font-black">0 Pts</span>
+                    </div>
+                    <button id="btn-play-semi2" onclick="launchMatch('semi2')" class="w-full py-3 bg-slate-300 text-slate-500 font-game text-base md:text-lg rounded-xl shadow cursor-not-allowed" disabled>
+                        <i class="fa-solid fa-lock mr-2"></i> Main Sesi 2
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- View 3: Arena Match View -->
+        <section id="view-arena" class="w-full max-w-6xl glass-card rounded-3xl p-3 md:p-5 hidden relative">
+            
+            <!-- Quick Notification Banner / Toast Overlay -->
+            <div id="quick-toast" class="absolute top-16 left-1/2 transform -translate-x-1/2 z-40 hidden">
+                <div id="quick-toast-body" class="px-6 py-3 rounded-full text-white font-game text-lg shadow-2xl flex items-center gap-3 toast-pop border-2 border-white">
+                    <span id="toast-icon" class="text-2xl">✅</span>
+                    <span id="toast-text">Jawaban Benar! +10 Pts</span>
+                </div>
+            </div>
+
+            <!-- Match Header Banner -->
+            <div class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 text-amber-950 px-4 py-2 rounded-2xl mb-3 text-center font-bold shadow flex items-center justify-between">
+                <span class="text-xs md:text-sm font-black uppercase tracking-wide" id="match-round-title">SESI 1 - SEMIFINAL (10 SOAL)</span>
+                <span id="status-banner" class="text-xs md:text-sm font-game bg-white px-3 py-1 rounded-full shadow-sm text-indigo-900 border border-amber-300 animate-pulse">
+                    ⚡ TEKAN BEL SISI ANDA DI LAYAR PID!
+                </span>
+                <span class="text-xs md:text-sm font-mono font-black bg-amber-200 text-amber-900 px-3 py-1 rounded-lg" id="question-count-badge">Soal 1 / 10</span>
+            </div>
+
+            <!-- Central Question Display -->
+            <div class="bg-white rounded-2xl p-4 shadow-inner border-2 border-slate-100 mb-3 text-center relative">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                    <span id="question-category" class="bg-indigo-100 text-indigo-900 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                        🔍 Mengidentifikasi Wujud Zat
+                    </span>
+                    <span id="question-target-learning" class="text-xs text-slate-500 font-bold">
+                        Tujuan Pembelajaran 1 & 2
+                    </span>
+                </div>
+
+                <div class="flex items-center justify-center gap-4 my-2">
+                    <div id="question-visual" class="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-md border-2 border-indigo-100 flex-shrink-0">
+                        🧪
+                    </div>
+                    <h3 id="question-text" class="text-base md:text-xl font-bold text-slate-800 leading-snug text-left flex-grow">
+                        Sedang memuat pertanyaan IPAS...
+                    </h3>
+                    <!-- Central Timer -->
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div id="timer-box" class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-800 text-amber-400 border-4 border-amber-400 flex items-center justify-center font-game text-xl md:text-2xl font-extrabold shadow-md">
+                            15
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 mt-0.5 uppercase" id="timer-label">Waktu Bel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DUAL PANELS FOR PID: LEFT PANEL & RIGHT PANEL -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- LEFT SIDE: TEAM A PANEL (Kelompok 1 / Kelompok 3) -->
+                <div id="panel-team-a" class="bg-blue-50/90 rounded-2xl p-4 border-4 border-blue-300 shadow-md flex flex-col justify-between transition-all">
+                    <!-- Team A Header & Score -->
+                    <div id="arena-team1-card" class="p-3 rounded-xl bg-blue-600 text-white shadow flex justify-between items-center mb-3">
+                        <div>
+                            <span class="text-[10px] opacity-90 uppercase tracking-wider font-extrabold block text-blue-100">PANEL PID SISI KIRI [Key 'A']</span>
+                            <h3 id="arena-team1-name" class="font-game text-lg md:text-xl font-bold truncate">Kelompok 1</h3>
+                        </div>
+                        <div class="text-right">
+                            <span id="arena-team1-score" class="font-game text-2xl md:text-4xl font-extrabold text-yellow-300">0</span>
+                            <span class="text-[10px] block font-semibold">Poin</span>
+                        </div>
+                    </div>
+
+                    <!-- Team A Buzzer Button -->
+                    <button id="btn-buzz-a" onclick="pressBuzzer(0)" class="w-full py-4 mb-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-game text-lg md:text-xl rounded-xl shadow-lg border-b-4 border-indigo-900 btn-bounce buzzer-glow-left flex flex-col items-center justify-center cursor-pointer active:scale-95">
+                        <span>🔔 TEKAN BEL TIM KIRI</span>
+                        <span class="text-[10px] font-sans font-bold opacity-80">(Sentuh Sisi Kiri PID / Tekan Key 'A')</span>
+                    </button>
+
+                    <!-- Team A Answer Options Grid (Left Side) -->
+                    <div id="options-grid-a" class="grid grid-cols-1 gap-2 opacity-40 pointer-events-none">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: TEAM B PANEL (Kelompok 2 / Kelompok 4) -->
+                <div id="panel-team-b" class="bg-rose-50/90 rounded-2xl p-4 border-4 border-rose-300 shadow-md flex flex-col justify-between transition-all">
+                    <!-- Team B Header & Score -->
+                    <div id="arena-team2-card" class="p-3 rounded-xl bg-rose-600 text-white shadow flex justify-between items-center mb-3">
+                        <div>
+                            <span class="text-[10px] opacity-90 uppercase tracking-wider font-extrabold block text-rose-100">PANEL PID SISI KANAN [Key 'L']</span>
+                            <h3 id="arena-team2-name" class="font-game text-lg md:text-xl font-bold truncate">Kelompok 2</h3>
+                        </div>
+                        <div class="text-right">
+                            <span id="arena-team2-score" class="font-game text-2xl md:text-4xl font-extrabold text-yellow-300">0</span>
+                            <span class="text-[10px] block font-semibold">Poin</span>
+                        </div>
+                    </div>
+
+                    <!-- Team B Buzzer Button -->
+                    <button id="btn-buzz-b" onclick="pressBuzzer(1)" class="w-full py-4 mb-3 bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 text-white font-game text-lg md:text-xl rounded-xl shadow-lg border-b-4 border-purple-900 btn-bounce buzzer-glow-right flex flex-col items-center justify-center cursor-pointer active:scale-95">
+                        <span>🔔 TEKAN BEL TIM KANAN</span>
+                        <span class="text-[10px] font-sans font-bold opacity-80">(Sentuh Sisi Kanan PID / Tekan Key 'L')</span>
+                    </button>
+
+                    <!-- Team B Answer Options Grid (Right Side) -->
+                    <div id="options-grid-b" class="grid grid-cols-1 gap-2 opacity-40 pointer-events-none">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-3 flex justify-between items-center">
+                <button onclick="exitMatchToBracket()" class="text-slate-700 hover:text-slate-900 font-bold text-xs bg-white/90 px-3 py-2 rounded-xl hover:bg-white transition border border-slate-300 shadow-sm cursor-pointer">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Bagan
+                </button>
+                <div class="text-xs text-slate-800 font-bold hidden md:block">
+                    💡 Layar PID: Sentuh Bel Tim Kiri (Sisi Kiri) atau Tim Kanan (Sisi Kanan). Tombol Pintas: <kbd class="bg-white border px-1 rounded shadow-sm">A</kbd> & <kbd class="bg-white border px-1 rounded shadow-sm">L</kbd>
+                </div>
+            </div>
+        </section>
+
+        <!-- Match Session Winner & Detailed Teacher's Explanation Modal -->
+        <div id="match-winner-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-3xl p-5 md:p-8 max-w-3xl w-full shadow-2xl text-center border-4 border-yellow-400 overflow-y-auto max-h-[92vh]">
+                <div class="text-5xl mb-2">🎉</div>
+                <h2 class="text-xs font-black text-slate-500 uppercase tracking-widest">HASIL SESI PERTANDINGAN (10 SOAL SELESAI)</h2>
+                <h1 id="match-winner-title" class="text-2xl md:text-3xl font-game font-bold text-indigo-950 mt-1 mb-4">Kelompok 1 Menang!</h1>
+                
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-5 grid grid-cols-2 gap-4">
+                    <div id="winner-score-box" class="p-3 bg-emerald-100 rounded-xl border border-emerald-300">
+                        <span id="winner-modal-name" class="block font-bold text-emerald-950 text-sm">Kelompok 1</span>
+                        <span id="winner-modal-score" class="font-game text-2xl md:text-3xl font-extrabold text-emerald-700">120 Pts</span>
+                    </div>
+                    <div id="loser-score-box" class="p-3 bg-rose-100 rounded-xl border border-rose-300">
+                        <span id="loser-modal-name" class="block font-bold text-rose-950 text-sm">Kelompok 2</span>
+                        <span id="loser-modal-score" class="font-game text-2xl md:text-3xl font-extrabold text-rose-700">80 Pts</span>
+                    </div>
+                </div>
+
+                <!-- Comprehensive Teacher Explanation / Rangkuman Pembelajaran IPAS Sesi Ini -->
+                <div class="bg-indigo-50/90 p-4 md:p-5 rounded-2xl border-2 border-indigo-200 mb-6 text-left space-y-3 text-xs md:text-sm text-indigo-950">
+                    <div class="font-black border-b-2 border-indigo-200 pb-2 text-indigo-900 flex items-center justify-between">
+                        <span class="text-sm md:text-base"><i class="fa-solid fa-chalkboard-user text-indigo-600 mr-2"></i>RANGKUMAN GURU: PENJELASAN MATERI IPAS SESI INI</span>
+                        <span class="bg-indigo-200 text-indigo-800 text-[10px] px-2.5 py-1 rounded-full font-bold">Kurikulum Merdeka</span>
+                    </div>
+
+                    <div id="session-explanation-content" class="space-y-3">
+                        <!-- Dynamic explanation per session injected here -->
+                    </div>
+                </div>
+
+                <button onclick="returnToBracket()" class="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-game text-lg md:text-xl rounded-2xl shadow-lg hover:from-amber-600 hover:to-yellow-600 transition btn-bounce cursor-pointer">
+                    <i class="fa-solid fa-trophy mr-2"></i> Lanjut ke Bagan Turnamen
+                </button>
+            </div>
+        </div>
+
+        <!-- Grand Champion & Complete IPAS Curriculum Summary Modal -->
+        <div id="champion-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+            <div class="glass-card bg-white/95 rounded-3xl p-5 md:p-8 max-w-3xl w-full text-center border-4 border-amber-400 shadow-2xl relative overflow-y-auto max-h-[92vh]">
+                <div class="relative z-10">
+                    <div class="inline-block p-4 bg-yellow-100 rounded-full text-yellow-600 text-5xl mb-2 border-2 border-yellow-300 animate-bounce">
+                        👑
+                    </div>
+                    <h2 class="text-xs font-black text-amber-600 uppercase tracking-widest">JUARA UTAMA TURNAMEN IPAS KELAS 4 SD</h2>
+                    <h1 id="champion-name" class="text-2xl md:text-4xl font-game font-extrabold text-indigo-950 my-1">
+                        KELOMPOK 1
+                    </h1>
+                    <p class="text-slate-600 font-bold mb-4 text-xs md:text-sm">Selamat! Seluruh kelompok telah berjuang luar biasa menguasai Materi Wujud Zat!</p>
+
+                    <!-- Comprehensive Teacher Explanation / Rangkuman Pembelajaran IPAS Kelas 4 -->
+                    <div class="bg-indigo-50/90 p-5 rounded-2xl border-2 border-indigo-200 mb-6 text-left space-y-4 text-xs md:text-sm text-indigo-950">
+                        <div class="font-black border-b-2 border-indigo-200 pb-2 text-indigo-900 flex items-center justify-between">
+                            <span class="text-sm md:text-base"><i class="fa-solid fa-chalkboard-user text-indigo-600 mr-2"></i>RANGKUMAN PENJELASAN LENGKAP GURU (EVALUASI AKHIR)</span>
+                            <span class="bg-indigo-200 text-indigo-800 text-[10px] px-2.5 py-1 rounded-full font-bold">IPAS Kelas 4 SD</span>
+                        </div>
+                        
+                        <!-- TP 1 Explanation -->
+                        <div class="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-sm">
+                            <strong class="text-blue-800 text-xs md:text-sm font-black block mb-1">
+                                📌 Tujuan 1: Deskripsi Karakteristik Wujud Zat (Padat, Cair, Gas)
+                            </strong>
+                            <p class="text-slate-700 font-semibold leading-relaxed text-xs">
+                                • <strong>Zat Padat:</strong> Memiliki bentuk dan volume yang <strong>TETAP</strong>. Partikel tersusun sangat rapat dan teratur.<br>
+                                • <strong>Zat Cair:</strong> Memiliki volume <strong>TETAP</strong>, tetapi bentuknya <strong>BERUBAH-UBAH</strong> mengikuti wadahnya.<br>
+                                • <strong>Zat Gas:</strong> Memiliki bentuk dan volume yang <strong>SELALU BERUBAH</strong> mengisi seluruh ruangan.
+                            </p>
+                        </div>
+                        
+                        <!-- TP 2 Explanation -->
+                        <div class="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-sm">
+                            <strong class="text-indigo-800 text-xs md:text-sm font-black block mb-1">
+                                🔍 Tujuan 2: Mengidentifikasi Wujud Zat dalam Kehidupan Sehari-hari
+                            </strong>
+                            <p class="text-slate-700 font-semibold leading-relaxed text-xs">
+                                • <strong>Zat Padat:</strong> Meja, pensil, kayu, es batu, batu, dan garam dapur.<br>
+                                • <strong>Zat Cair:</strong> Air minum, minyak goreng, sirup, kecap, bensin, dan madu.<br>
+                                • <strong>Zat Gas:</strong> Udara di dalam balon, uap air dari teko mendidih, asap pembakaran, dan aroma parfum.
+                            </p>
+                        </div>
+
+                        <!-- TP 3 Explanation -->
+                        <div class="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-sm">
+                            <strong class="text-purple-800 text-xs md:text-sm font-black block mb-1">
+                                ⚖ Tujuan 3: Membedakan Karakteristik Wujud Zat Padat, Cair, dan Gas
+                            </strong>
+                            <p class="text-slate-700 font-semibold leading-relaxed text-xs">
+                                • <strong>Persamaan Padat & Cair:</strong> Keduanya sama-sama memiliki <strong>volume yang tetap</strong>.<br>
+                                • <strong>Perbedaan Cair & Gas:</strong> Zat cair bentuknya mengikuti wadah dengan volume tetap, sedangkan zat gas bentuk DAN volumenya dapat berubah-ubah serta mudah dimampatkan.
+                            </p>
+                        </div>
+
+                        <div class="bg-amber-100 p-3 rounded-xl border border-amber-300 text-amber-950 font-bold text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-star text-amber-600 text-lg"></i>
+                            <span><strong>Catatan Guru:</strong> Berikan tepuk tangan meriah untuk seluruh peserta didik yang telah berpartisipasi dengan hebat!</span>
+                        </div>
+                    </div>
+
+                    <button onclick="resetWholeGame()" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-game text-xl rounded-2xl shadow-xl hover:from-indigo-700 hover:to-blue-700 transition btn-bounce cursor-pointer">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Mainkan Turnamen Baru
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center text-white/90 text-xs py-1 font-semibold">
+        <p>© Turnamen IPAS Kelas 4 SD • Media Pembelajaran Papan Interaktif Digital (PID) • Kurikulum Merdeka</p>
+    </footer>
+
+    <script>
+        // Global Game State
+        let teams = [
+            { id: 1, name: "Kelompok 1", score: 0 },
+            { id: 2, name: "Kelompok 2", score: 0 },
+            { id: 3, name: "Kelompok 3", score: 0 },
+            { id: 4, name: "Kelompok 4", score: 0 }
+        ];
+
+        let tournamentState = {
+            semi1Winner: null,
+            semi1Loser: null,
+            semi2Winner: null,
+            semi2Loser: null,
+            champion: null,
+            currentMatchKey: null // 'semi1', 'semi2', 'final'
+        };
+
+        let currentMatchData = {
+            teamA: null,
+            teamB: null,
+            scoreA: 0,
+            scoreB: 0,
+            questionList: [],
+            currentQuestionIdx: 0,
+            activeBuzzerTeam: null, // 0 for Team A (Left Panel), 1 for Team B (Right Panel)
+            timerInterval: null,
+            timeLeft: 15,
+            mode: 'buzzer_waiting' // 'buzzer_waiting', 'answering', 'stealing'
+        };
+
+        // SESI 1 QUESTION BANK (Kelompok 1 vs Kelompok 2 - 10 Soal Level 1)
+        const session1Questions = [
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Sifat Zat Padat",
+                question: "Benda yang memiliki bentuk dan volume yang SELALU TETAP meskipun dipindahkan ke tempat lain adalah...",
+                icon: "🧱",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Campuran"],
+                correct: 0,
+                explanation: "Zat padat memiliki bentuk dan volume tetap karena ikatan antar partikelnya sangat rapat dan kuat."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Sifat Zat Cair",
+                question: "Ciri utama dari zat cair ketika dituangkan ke dalam wadah yang berbeda adalah...",
+                icon: "🌊",
+                options: ["Bentuknya tetap kaku", "Bentuknya berubah mengikuti wadah", "Volumenya bertambah besar", "Membeku seketika"],
+                correct: 1,
+                explanation: "Zat cair memiliki volume tetap, tetapi bentuknya selalu menyesuaikan dengan bentuk wadahnya."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Sifat Zat Gas",
+                question: "Zat yang bentuk dan volumenya SELALU BERUBAH dan mengisi seluruh ruangan adalah...",
+                icon: "💭",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Keras"],
+                correct: 2,
+                explanation: "Partikel zat gas bergerak sangat bebas ke segala arah sehingga mengisi seluruh ruang wadahnya."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Minyak goreng, kecap, dan sirup manis di dapur tergolong benda berwujud...",
+                icon: "🧴",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Kristal"],
+                correct: 1,
+                explanation: "Minyak, kecap, dan sirup adalah zat cair karena dapat mengalir dan bentuknya menyerupai tempat penampungannya."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Meja kayu, pensil tulis, dan penghapus di dalam kelas merupakan contoh...",
+                icon: "🪑",
+                options: ["Zat Cair", "Zat Padat", "Zat Gas", "Zat Uap"],
+                correct: 1,
+                explanation: "Meja, pensil, dan penghapus memiliki bentuk kaku dan volume tetap, tergolong zat padat."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Udara yang ditiupkan ke dalam balon mainan anak-anak berwujud...",
+                icon: "🎈",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Beku"],
+                correct: 2,
+                explanation: "Udara menempati ruang di dalam balon dan menekan ke segala arah, merupakan zat gas."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖ Persamaan & Perbedaan Sifat",
+                question: "Persamaan antara zat padat dan zat cair adalah keduanya memiliki...",
+                icon: "📐",
+                options: ["Bentuk yang selalu tetap", "Volume yang selalu tetap", "Kemampuan mengalir", "Bentuk sesuai wadah"],
+                correct: 1,
+                explanation: "Baik zat padat maupun zat cair sama-sama memiliki volume yang tetap tidak peduli dipindahkan ke wadah mana pun."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖️ Perbedaan Aliran Zat",
+                question: "Air teh dapat dituangkan dari teko ke gelas, sedangkan batu tidak bisa mengalir karena...",
+                icon: "🫗",
+                options: ["Batu tidak punya massa", "Partikel zat cair dapat bergerak mengalir", "Batu adalah zat cair", "Air teh berbentuk padat"],
+                correct: 1,
+                explanation: "Partikel zat cair tidak terikat kaku sehingga dapat mengalir bebas ke tempat yang lebih rendah."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Susunan Partikel",
+                question: "Susunan partikel pada zat padat memiliki sifat yaitu...",
+                icon: "🧩",
+                options: ["Sangat rapat dan teratur", "Sangat berjauhan dan renggang", "Bisa bergerak bebas", "Tidak tersusun"],
+                correct: 0,
+                explanation: "Partikel zat padat terikat rapat dan teratur, membuat zat padat kokoh dan tidak mudah berubah bentuk."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Es batu di dalam cangkir minuman dingin adalah air yang berada dalam wujud...",
+                icon: "🧊",
+                options: ["Zat Cair", "Zat Padat", "Zat Gas", "Zat Panas"],
+                correct: 1,
+                explanation: "Es batu merupakan wujud padat dari air karena mengalami penurunan suhu membeku."
+            }
+        ];
+
+        // SESI 2 QUESTION BANK (Kelompok 3 vs Kelompok 4 - 10 Soal Level 2)
+        const session2Questions = [
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Susunan Partikel Gas",
+                question: "Partikel pada zat gas memiliki karakteristik utama yaitu...",
+                icon: "💨",
+                options: ["Sangat rapat dan kaku", "Renggang dan bergerak sangat bebas", "Terikat kuat satu sama lain", "Membeku mengendap"],
+                correct: 1,
+                explanation: "Partikel gas berjauhan satu sama lain sehingga bebas bergerak dan mengisi seluruh wadah."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Asap kendaraan dan uap air yang keluar saat memasak air termasuk contoh wujud...",
+                icon: "♨️",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Basah"],
+                correct: 2,
+                explanation: "Asap dan uap air menguap dan menyebar bebas di udara, merupakan benda berwujud gas."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Susu cair, madu murni, dan bensin di stasiun pengisian tergolong benda...",
+                icon: "🍯",
+                options: ["Zat Cair", "Zat Padat", "Zat Gas", "Zat Uap"],
+                correct: 0,
+                explanation: "Susu, madu, dan bensin dapat mengalir serta bentuknya mengikuti wadahnya, tergolong zat cair."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Aroma parfum yang tercium dari jarak jauh membuktikan bahwa cairan parfum berubah menjadi...",
+                icon: "🌸",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Es"],
+                correct: 2,
+                explanation: "Parfum menguap menjadi gas dan menyebar di udara hingga dapat tercium oleh indra penciuman."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖️ Perbedaan Sifat Bentuk",
+                question: "Perbedaan utama sifat bentuk antara zat padat dan zat cair adalah...",
+                icon: "🧪",
+                options: ["Zat padat berubah, zat cair tetap", "Zat padat tetap, zat cair berubah sesuai wadah", "Keduanya berubah-ubah", "Keduanya selalu tetap"],
+                correct: 1,
+                explanation: "Bentuk zat padat selalu tetap, sedangkan zat cair menyesuaikan bentuk wadah yang ditempatinya."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖️️ Menganalisis Butiran",
+                question: "Garam halus di dalam mangkuk tampak menyerupai bentuk mangkuk. Apakah garam tergolong zat cair?",
+                icon: "🧂",
+                options: ["Ya, karena mengalir", "Bukan, garam tetap zat padat berupa butiran kecil", "Ya, volumenya berubah", "Bukan, garam zat gas"],
+                correct: 1,
+                explanation: "Setiap butiran garam adalah zat padat yang bentuknya tetap. Hanya kumpulannya saja yang mengikuti wadah."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖️ Tekanan pada Gas",
+                question: "Ketika ditiup, balon mengembang ke seluruh arah secara merata. Hal ini membuktikan gas...",
+                icon: "🎈",
+                options: ["Menekan ke segala arah", "Hanya bergerak ke bawah", "Berwujud padat", "Memiliki bentuk kaku"],
+                correct: 0,
+                explanation: "Zat gas menekan ke seluruh dinding wadahnya secara merata sehingga balon mengembang bulat."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "💡 Sifat Kemampatan",
+                question: "Wujud zat yang paling MUDAH dimampatkan (ditekan menjadi lebih sempit volumenya) adalah...",
+                icon: "💉",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Keras"],
+                correct: 2,
+                explanation: "Partikel zat gas yang sangat berjauhan membuatnya paling mudah ditekan atau dimampatkan."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🔍 Mengidentifikasi Wujud Zat",
+                question: "Batu bata, kelereng, dan papan tulis di sekolah termasuk dalam kelompok...",
+                icon: "🧱",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Embun"],
+                correct: 0,
+                explanation: "Batu bata, kelereng, dan papan tulis berwujud padat karena mempertahankan bentuk dan ukurannya."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "⚖️ Perlakuan fisik pada padat",
+                question: "Bentuk zat padat dapat diubah hanya jika diberikan perlakuan fisik, contohnya...",
+                icon: "✂️",
+                options: ["Memotong kayu / meremas kertas", "Menuangkan air ke botol", "Meniup udara ke plastik", "Membiarkan es meleleh"],
+                correct: 0,
+                explanation: "Zat padat dapat berubah bentuknya secara sengaja jika dipotong, diremas, ditekan, atau dipukul."
+            }
+        ];
+
+        // FINAL CHAMPIONSHIP QUESTION BANK (Pemenang Sesi 1 vs Pemenang Sesi 2 - 10 Soal Level Final)
+        const finalQuestions = [
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "🏆 Perbandingan Tiga Wujud",
+                question: "Manakah kombinasi sifat yang BENAR untuk wujud zat gas?",
+                icon: "💨",
+                options: ["Bentuk tetap, volume tetap", "Bentuk berubah, volume tetap", "Bentuk berubah, volume berubah", "Bentuk tetap, volume berubah"],
+                correct: 2,
+                explanation: "Zat gas merupakan wujud zat yang bentuk maupun volumenya selalu berubah-ubah mengikuti ruangan."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Urutan Zat",
+                category: "🏆 Mengurutkan Wujud Zat",
+                question: "Kelompok benda berikut yang secara berurutan berwujud PADAT, CAIR, dan GAS adalah...",
+                icon: "🔄",
+                options: ["Pensil, Sirup, Asap", "Air, Buku, Uap", "Oksigen, Minyak, Batu", "Es, Batu, Kecap"],
+                correct: 0,
+                explanation: "Pensil (Padat), Sirup (Cair), dan Asap (Gas) sesuai dengan urutan wujud zat yang diminta."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "🏆 Sifat Permukaan Zat Cair",
+                question: "Sifat khas permukaan zat cair yang tenang di dalam wadah adalah selalu...",
+                icon: "🌊",
+                options: ["Miring ke atas", "Datar dan mendaftar", "Berbentuk gelombang", "Mengembun kaku"],
+                correct: 1,
+                explanation: "Permukaan zat cair dalam keadaan tenang selalu dalam posisi datar."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "🏆 Karakteristik Volume",
+                question: "Jika air 500 ml dalam botol dipindahkan seluruhnya ke dalam mangkuk, maka volumenya menjadi...",
+                icon: "🥛",
+                options: ["Berkurang jadi 300 ml", "Tetap 500 ml", "Bertambah jadi 1000 ml", "Menjadi 0 ml"],
+                correct: 1,
+                explanation: "Zat cair memiliki volume yang tetap meskipun dipindahkan ke wadah yang berbeda bentuk."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🏆 Perubahan Wujud Zat",
+                question: "Kapur barus (kamper) di dalam lemari pakaian lama-kelamaan habis menjadi gas wujud...",
+                icon: "🧺",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Air"],
+                correct: 2,
+                explanation: "Kamper yang menyublim berubah dari zat padat menjadi zat gas yang wangi di dalam lemari."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "🏆 Gaya Tarik Partikel",
+                question: "Gaya tarik antar partikel yang paling LEMAH terdapat pada...",
+                icon: "💨",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Beku"],
+                correct: 2,
+                explanation: "Zat gas memiliki gaya tarik antar partikel paling lemah sehingga partikelnya dapat bergerak sangat bebas."
+            },
+            {
+                target: "Tujuan 2: Identifikasi Zat Sehari-hari",
+                category: "🏆 Identifikasi Oksigen",
+                question: "Oksigen yang kita hirup saat bernapas sehari-hari berwujud...",
+                icon: "🫁",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Bening"],
+                correct: 2,
+                explanation: "Oksigen adalah gas tak terlihat yang sangat penting bagi pernapasan makhluk hidup."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "🏆 Kemampuan Mengalir",
+                question: "Zat yang MEMILIKI KEMAMPUAN MENGALIR dari tempat tinggi ke rendah adalah...",
+                icon: "🫗",
+                options: ["Zat Padat saja", "Zat Cair saja", "Zat Gas saja", "Zat Padat dan Gas"],
+                correct: 1,
+                explanation: "Zat cair mengalir dari tempat yang lebih tinggi ke tempat yang lebih rendah karena pengaruh gravitasi."
+            },
+            {
+                target: "Tujuan 1: Deskripsi Karakteristik Wujud Zat",
+                category: "🏆 Karakteristik Zat Padat",
+                question: "Mengapa kayu sukar untuk ditekan atau dimampatkan?",
+                icon: "🪵",
+                options: ["Karena ikatan partikelnya sangat rapat", "Karena kayu dapat mengalir", "Karena volumenya berubah", "Karena kayu berbentuk gas"],
+                correct: 0,
+                explanation: "Partikel zat padat tersusun sangat rapat tanpa ruang kosong sehingga sulit dimampatkan."
+            },
+            {
+                target: "Tujuan 3: Membedakan Sifat Wujud Zat",
+                category: "🏆 Penentuan Wujud Zat",
+                question: "Benda X memiliki bentuk berubah sesuai wadah tetapi volumenya selalu 200 ml. Benda X adalah...",
+                icon: "🧪",
+                options: ["Zat Padat", "Zat Cair", "Zat Gas", "Zat Api"],
+                correct: 1,
+                explanation: "Memiliki bentuk berubah mengikuti wadah namun volumenya tetap merupakan ciri khas zat cair."
+            }
+        ];
+
+        // Web Audio API Sound Generator
+        const playSound = (type) => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'buzzer') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(650, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.35, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.25);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.35);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.35);
+                } else if (type === 'wrong') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.setValueAtTime(130, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.35, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.35);
+                } else if (type === 'win') {
+                    const now = ctx.currentTime;
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(554.37, now + 0.1);
+                    osc.frequency.setValueAtTime(659.25, now + 0.2);
+                    osc.frequency.setValueAtTime(880, now + 0.3);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start();
+                    osc.stop(now + 0.6);
+                }
+            } catch (e) {
+                console.log('Audio Context error:', e);
+            }
+        };
+
+        function startTournament() {
+            teams[0].name = document.getElementById('input-team-1').value.trim() || "Kelompok 1";
+            teams[1].name = document.getElementById('input-team-2').value.trim() || "Kelompok 2";
+            teams[2].name = document.getElementById('input-team-3').value.trim() || "Kelompok 3";
+            teams[3].name = document.getElementById('input-team-4').value.trim() || "Kelompok 4";
+
+            document.getElementById('name-semi1-a').innerText = teams[0].name;
+            document.getElementById('name-semi1-b').innerText = teams[1].name;
+            document.getElementById('name-semi2-a').innerText = teams[2].name;
+            document.getElementById('name-semi2-b').innerText = teams[3].name;
+
+            switchView('view-bracket');
+            playSound('correct');
+        }
+
+        function switchView(viewId) {
+            document.getElementById('view-setup').classList.add('hidden');
+            document.getElementById('view-bracket').classList.add('hidden');
+            document.getElementById('view-arena').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // Keyboard Controls: 'A' for Left Team (0), 'L' for Right Team (1)
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('view-arena').classList.contains('hidden')) return;
+            if (currentMatchData.mode !== 'buzzer_waiting') return;
+
+            const key = e.key.toLowerCase();
+            if (key === 'a') {
+                pressBuzzer(0);
+            } else if (key === 'l') {
+                pressBuzzer(1);
+            }
+        });
+
+        function launchMatch(matchKey) {
+            tournamentState.currentMatchKey = matchKey;
+
+            if (matchKey === 'semi1') {
+                currentMatchData.teamA = teams[0];
+                currentMatchData.teamB = teams[1];
+                currentMatchData.questionList = [...session1Questions];
+                document.getElementById('match-round-title').innerText = "SESI 1 - SEMIFINAL (10 SOAL)";
+            } else if (matchKey === 'semi2') {
+                currentMatchData.teamA = teams[2];
+                currentMatchData.teamB = teams[3];
+                currentMatchData.questionList = [...session2Questions];
+                document.getElementById('match-round-title').innerText = "SESI 2 - SEMIFINAL (10 SOAL)";
+            } else if (matchKey === 'final') {
+                currentMatchData.teamA = tournamentState.semi1Winner;
+                currentMatchData.teamB = tournamentState.semi2Winner;
+                currentMatchData.questionList = [...finalQuestions];
+                document.getElementById('match-round-title').innerText = "🏆 BABAK FINAL CHAMPIONSHIP (10 SOAL) 🏆";
+            }
+
+            currentMatchData.scoreA = 0;
+            currentMatchData.scoreB = 0;
+            currentMatchData.currentQuestionIdx = 0;
+
+            // Update Match Arena Header Card
+            document.getElementById('arena-team1-name').innerText = currentMatchData.teamA.name;
+            document.getElementById('arena-team2-name').innerText = currentMatchData.teamB.name;
+            document.getElementById('arena-team1-score').innerText = "0";
+            document.getElementById('arena-team2-score').innerText = "0";
+
+            switchView('view-arena');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            clearInterval(currentMatchData.timerInterval);
+            
+            const q = currentMatchData.questionList[currentMatchData.currentQuestionIdx];
+            currentMatchData.mode = 'buzzer_waiting';
+            currentMatchData.activeBuzzerTeam = null;
+
+            // Hide toast if visible
+            document.getElementById('quick-toast').classList.add('hidden');
+
+            // Display question info
+            document.getElementById('question-count-badge').innerText = `Soal ${currentMatchData.currentQuestionIdx + 1} / 10`;
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-target-learning').innerText = q.target;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('question-visual').innerHTML = q.icon;
+
+            // Reset status banner
+            document.getElementById('status-banner').innerText = "⚡ TEKAN BEL SISI ANDA DI LAYAR PID!";
+            document.getElementById('status-banner').className = "text-xs md:text-sm font-game bg-white px-3 py-1 rounded-full shadow-sm text-indigo-900 border border-amber-300 animate-pulse";
+            
+            // Reset team panels styling
+            document.getElementById('panel-team-a').className = "bg-blue-50/90 rounded-2xl p-4 border-4 border-blue-300 shadow-md flex flex-col justify-between transition-all";
+            document.getElementById('panel-team-b').className = "bg-rose-50/90 rounded-2xl p-4 border-4 border-rose-300 shadow-md flex flex-col justify-between transition-all";
+
+            // Enable buzzer buttons
+            const buzzA = document.getElementById('btn-buzz-a');
+            const buzzB = document.getElementById('btn-buzz-b');
+            buzzA.disabled = false;
+            buzzB.disabled = false;
+            buzzA.classList.remove('opacity-40', 'pointer-events-none');
+            buzzB.classList.remove('opacity-40', 'pointer-events-none');
+
+            // Render Split Options Panel for Dual-Touch PID
+            const optionsGridA = document.getElementById('options-grid-a');
+            const optionsGridB = document.getElementById('options-grid-b');
+            
+            optionsGridA.className = "grid grid-cols-1 gap-2 opacity-40 pointer-events-none";
+            optionsGridB.className = "grid grid-cols-1 gap-2 opacity-40 pointer-events-none";
+            
+            optionsGridA.innerHTML = '';
+            optionsGridB.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                // Left Panel Button (Team Kiri / Tim A)
+                const btnA = document.createElement('button');
+                btnA.className = `w-full text-left p-2.5 rounded-xl border-2 font-bold text-xs md:text-sm transition transform active:scale-95 flex items-center gap-2 bg-white border-blue-200 hover:bg-blue-100 text-slate-800 shadow-sm cursor-pointer`;
+                btnA.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-game text-xs flex-shrink-0">${String.fromCharCode(65 + idx)}</span>
+                    <span class="leading-tight">${opt}</span>
+                `;
+                btnA.onclick = () => handleAnswerSelect(idx);
+                optionsGridA.appendChild(btnA);
+
+                // Right Panel Button (Team Kanan / Tim B)
+                const btnB = document.createElement('button');
+                btnB.className = `w-full text-left p-2.5 rounded-xl border-2 font-bold text-xs md:text-sm transition transform active:scale-95 flex items-center gap-2 bg-white border-rose-200 hover:bg-rose-100 text-slate-800 shadow-sm cursor-pointer`;
+                btnB.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center font-game text-xs flex-shrink-0">${String.fromCharCode(65 + idx)}</span>
+                    <span class="leading-tight">${opt}</span>
+                `;
+                btnB.onclick = () => handleAnswerSelect(idx);
+                optionsGridB.appendChild(btnB);
+            });
+
+            // Start 15s Countdown Timer
+            startTimer(15, "Waktu Bel", () => {
+                playSound('wrong');
+                showToast("⏱ Waktu Bel Habis!", "TIDAK ADA KELOMPOK MENJAWAB", "bg-amber-600");
+                setTimeout(() => {
+                    nextQuestionDirectly();
+                }, 1200);
+            });
+        }
+
+        function startTimer(seconds, labelText, onComplete) {
+            clearInterval(currentMatchData.timerInterval);
+            currentMatchData.timeLeft = seconds;
+            document.getElementById('timer-label').innerText = labelText;
+            document.getElementById('timer-box').innerText = currentMatchData.timeLeft;
+
+            currentMatchData.timerInterval = setInterval(() => {
+                currentMatchData.timeLeft--;
+                document.getElementById('timer-box').innerText = currentMatchData.timeLeft;
+
+                if (currentMatchData.timeLeft <= 0) {
+                    clearInterval(currentMatchData.timerInterval);
+                    if (onComplete) onComplete();
+                }
+            }, 1000);
+        }
+
+        function pressBuzzer(teamIdx) {
+            if (currentMatchData.mode !== 'buzzer_waiting') return;
+
+            clearInterval(currentMatchData.timerInterval);
+            playSound('buzzer');
+
+            currentMatchData.activeBuzzerTeam = teamIdx; // 0 = Left (A), 1 = Right (B)
+            currentMatchData.mode = 'answering';
+
+            const teamObj = (teamIdx === 0) ? currentMatchData.teamA : currentMatchData.teamB;
+            
+            // Highlight active buzzer panel
+            if (teamIdx === 0) {
+                document.getElementById('panel-team-a').className = "bg-blue-100/95 rounded-2xl p-4 border-4 border-yellow-400 shadow-2xl ring-4 ring-yellow-300 flex flex-col justify-between transition-all";
+                document.getElementById('options-grid-a').className = "grid grid-cols-1 gap-2 opacity-100 pointer-events-auto";
+            } else {
+                document.getElementById('panel-team-b').className = "bg-rose-100/95 rounded-2xl p-4 border-4 border-yellow-400 shadow-2xl ring-4 ring-yellow-300 flex flex-col justify-between transition-all";
+                document.getElementById('options-grid-b').className = "grid grid-cols-1 gap-2 opacity-100 pointer-events-auto";
+            }
+
+            // Lock buzzers
+            document.getElementById('btn-buzz-a').classList.add('opacity-40', 'pointer-events-none');
+            document.getElementById('btn-buzz-b').classList.add('opacity-40', 'pointer-events-none');
+
+            document.getElementById('status-banner').innerText = `🎯 GILIRAN: ${teamObj.name.toUpperCase()} (PILIH JAWABAN DI SISI ANDA!)`;
+            document.getElementById('status-banner').className = "text-xs md:text-sm font-game bg-yellow-300 px-3 py-1 rounded-full shadow-sm text-indigo-950 border border-yellow-500 font-bold animate-bounce";
+
+            // 10 Seconds countdown for selected team to touch answer
+            startTimer(10, "Waktu Jawab", () => {
+                handleAnswerSelect(-1); // Timeout
+            });
+        }
+
+        function handleAnswerSelect(selectedIndex) {
+            clearInterval(currentMatchData.timerInterval);
+            const q = currentMatchData.questionList[currentMatchData.currentQuestionIdx];
+            const isCorrect = (selectedIndex === q.correct);
+            const activeTeamIdx = currentMatchData.activeBuzzerTeam;
+            const activeTeamObj = (activeTeamIdx === 0) ? currentMatchData.teamA : currentMatchData.teamB;
+            const opponentTeamObj = (activeTeamIdx === 0) ? currentMatchData.teamB : currentMatchData.teamA;
+
+            if (isCorrect) {
+                playSound('correct');
+                const speedBonus = Math.max(1, Math.floor(currentMatchData.timeLeft / 2));
+                const totalPoints = 10 + speedBonus;
+
+                if (activeTeamIdx === 0) {
+                    currentMatchData.scoreA += totalPoints;
+                    document.getElementById('arena-team1-score').innerText = currentMatchData.scoreA;
+                } else {
+                    currentMatchData.scoreB += totalPoints;
+                    document.getElementById('arena-team2-score').innerText = currentMatchData.scoreB;
+                }
+
+                showToast("🎉 Benar!", `${activeTeamObj.name} (+${totalPoints} Pts)`, "bg-emerald-600");
+                
+                // Direct fast-paced progression to next question!
+                setTimeout(() => {
+                    nextQuestionDirectly();
+                }, 1200);
+
+            } else {
+                playSound('wrong');
+
+                // Deduct 5 points penalty
+                if (activeTeamIdx === 0) {
+                    currentMatchData.scoreA = Math.max(0, currentMatchData.scoreA - 5);
+                    document.getElementById('arena-team1-score').innerText = currentMatchData.scoreA;
+                } else {
+                    currentMatchData.scoreB = Math.max(0, currentMatchData.scoreB - 5);
+                    document.getElementById('arena-team2-score').innerText = currentMatchData.scoreB;
+                }
+
+                if (currentMatchData.mode === 'answering') {
+                    // Activate Steal Mode (Babak Curi Poin) for Opponent
+                    currentMatchData.mode = 'stealing';
+                    currentMatchData.activeBuzzerTeam = (activeTeamIdx === 0) ? 1 : 0;
+
+                    showToast("❌ Salah!", `${activeTeamObj.name} (-5 Pts). Curi Poin: ${opponentTeamObj.name}!`, "bg-rose-600");
+
+                    setTimeout(() => {
+                        startStealRound();
+                    }, 1200);
+
+                } else {
+                    // Already in steal mode and wrong
+                    showToast("❌ Salah!", `Curi poin gagal! Soal berlanjut...`, "bg-rose-700");
+                    setTimeout(() => {
+                        nextQuestionDirectly();
+                    }, 1200);
+                }
+            }
+        }
+
+        function startStealRound() {
+            const stealTeamIdx = currentMatchData.activeBuzzerTeam;
+            const stealTeamObj = (stealTeamIdx === 0) ? currentMatchData.teamA : currentMatchData.teamB;
+
+            document.getElementById('status-banner').innerText = `🔥 MENCURI POIN: GILIRAN ${stealTeamObj.name.toUpperCase()}`;
+            document.getElementById('status-banner').className = "text-xs md:text-sm font-game bg-amber-400 px-3 py-1 rounded-full text-amber-950 font-bold border border-amber-600 animate-pulse";
+
+            if (stealTeamIdx === 0) {
+                document.getElementById('panel-team-a').className = "bg-blue-100/95 rounded-2xl p-4 border-4 border-yellow-400 shadow-2xl ring-4 ring-yellow-300 flex flex-col justify-between transition-all";
+                document.getElementById('panel-team-b').className = "bg-rose-50/90 rounded-2xl p-4 border-4 border-rose-300 shadow-md flex flex-col justify-between transition-all opacity-50";
+                document.getElementById('options-grid-a').className = "grid grid-cols-1 gap-2 opacity-100 pointer-events-auto";
+                document.getElementById('options-grid-b').className = "grid grid-cols-1 gap-2 opacity-40 pointer-events-none";
+            } else {
+                document.getElementById('panel-team-b').className = "bg-rose-100/95 rounded-2xl p-4 border-4 border-yellow-400 shadow-2xl ring-4 ring-yellow-300 flex flex-col justify-between transition-all";
+                document.getElementById('panel-team-a').className = "bg-blue-50/90 rounded-2xl p-4 border-4 border-blue-300 shadow-md flex flex-col justify-between transition-all opacity-50";
+                document.getElementById('options-grid-b').className = "grid grid-cols-1 gap-2 opacity-100 pointer-events-auto";
+                document.getElementById('options-grid-a').className = "grid grid-cols-1 gap-2 opacity-40 pointer-events-none";
+            }
+
+            startTimer(8, "Curi Poin", () => {
+                showToast("⏱ Waktu Habis!", "Kesempatan curi poin selesai.", "bg-slate-700");
+                setTimeout(() => {
+                    nextQuestionDirectly();
+                }, 1000);
+            });
+        }
+
+        function showToast(iconText, msgText, bgColor) {
+            const toast = document.getElementById('quick-toast');
+            const toastBody = document.getElementById('quick-toast-body');
+            document.getElementById('toast-icon').innerText = iconText;
+            document.getElementById('toast-text').innerText = msgText;
+            toastBody.className = `px-6 py-3 rounded-full text-white font-game text-sm md:text-lg shadow-2xl flex items-center gap-3 toast-pop border-2 border-white ${bgColor}`;
+            toast.classList.remove('hidden');
+        }
+
+        function nextQuestionDirectly() {
+            currentMatchData.currentQuestionIdx++;
+
+            if (currentMatchData.currentQuestionIdx < currentMatchData.questionList.length) {
+                renderQuestion();
+            } else {
+                finishMatch();
+            }
+        }
+
+        function finishMatch() {
+            clearInterval(currentMatchData.timerInterval);
+            playSound('win');
+            
+            let winner, loser, scoreWin, scoreLose;
+            
+            if (currentMatchData.scoreA >= currentMatchData.scoreB) {
+                winner = currentMatchData.teamA;
+                loser = currentMatchData.teamB;
+                scoreWin = currentMatchData.scoreA;
+                scoreLose = currentMatchData.scoreB;
+            } else {
+                winner = currentMatchData.teamB;
+                loser = currentMatchData.teamA;
+                scoreWin = currentMatchData.scoreB;
+                scoreLose = currentMatchData.scoreA;
+            }
+
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+
+            // Generate Post-Session Teacher Explanation Content
+            renderSessionExplanation();
+
+            // Bracket Progress Logic
+            if (tournamentState.currentMatchKey === 'semi1') {
+                tournamentState.semi1Winner = winner;
+                tournamentState.semi1Loser = loser;
+                document.getElementById('score-semi1-a').innerText = `${currentMatchData.scoreA} Pts`;
+                document.getElementById('score-semi1-b').innerText = `${currentMatchData.scoreB} Pts`;
+                
+                document.getElementById('btn-play-semi1').classList.add('hidden');
+                document.getElementById('btn-play-semi2').disabled = false;
+                document.getElementById('btn-play-semi2').className = "w-full py-3 bg-blue-600 text-white font-game text-base md:text-lg rounded-xl shadow-md hover:bg-blue-700 transition btn-bounce flex items-center justify-center gap-2 cursor-pointer";
+
+            } else if (tournamentState.currentMatchKey === 'semi2') {
+                tournamentState.semi2Winner = winner;
+                tournamentState.semi2Loser = loser;
+                document.getElementById('score-semi2-a').innerText = `${currentMatchData.scoreA} Pts`;
+                document.getElementById('score-semi2-b').innerText = `${currentMatchData.scoreB} Pts`;
+
+                document.getElementById('btn-play-semi2').classList.add('hidden');
+                document.getElementById('final-match-display').innerHTML = `
+                    <span class="text-indigo-900 font-extrabold">${tournamentState.semi1Winner.name}</span>
+                    <span class="text-rose-600 px-2 font-black">VS</span>
+                    <span class="text-indigo-900 font-extrabold">${tournamentState.semi2Winner.name}</span>
+                `;
+                document.getElementById('btn-play-final').classList.remove('hidden');
+
+            } else if (tournamentState.currentMatchKey === 'final') {
+                tournamentState.champion = winner;
+                showGrandChampion(winner);
+                return;
+            }
+
+            // Show Session Winner Modal with Explanation
+            document.getElementById('match-winner-title').innerText = `${winner.name} Menang! 🎉`;
+            document.getElementById('winner-modal-name').innerText = winner.name;
+            document.getElementById('winner-modal-score').innerText = `${scoreWin} Pts`;
+            document.getElementById('loser-modal-name').innerText = loser.name;
+            document.getElementById('loser-modal-score').innerText = `${scoreLose} Pts`;
+
+            document.getElementById('match-winner-modal').classList.remove('hidden');
+        }
+
+        function renderSessionExplanation() {
+            const container = document.getElementById('session-explanation-content');
+            container.innerHTML = '';
+
+            const matchQuestions = currentMatchData.questionList;
+
+            matchQuestions.forEach((q, idx) => {
+                const item = document.createElement('div');
+                item.className = "bg-white p-3 rounded-xl border border-indigo-100 shadow-sm";
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[11px] font-black text-indigo-800 uppercase bg-indigo-100 px-2 py-0.5 rounded">Soal ${idx + 1}: ${q.category}</span>
+                        <span class="text-[10px] text-slate-500 font-bold">${q.target}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 text-xs mb-1">❓ ${q.question}</p>
+                    <p class="text-emerald-700 font-extrabold text-xs">✅ Jawaban Tepat: <span class="bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">${q.options[q.correct]}</span></p>
+                    <p class="text-slate-600 text-xs mt-1 bg-slate-50 p-2 rounded-lg border border-slate-200 leading-relaxed"><strong>💡 Penjelasan Guru:</strong> ${q.explanation}</p>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function returnToBracket() {
+            document.getElementById('match-winner-modal').classList.add('hidden');
+            switchView('view-bracket');
+        }
+
+        function exitMatchToBracket() {
+            clearInterval(currentMatchData.timerInterval);
+            switchView('view-bracket');
+        }
+
+        function showGrandChampion(champion) {
+            document.getElementById('champion-name').innerText = champion.name;
+            document.getElementById('champion-modal').classList.remove('hidden');
+
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 7, angle: 60, spread: 60, origin: { x: 0 } });
+                confetti({ particleCount: 7, angle: 120, spread: 60, origin: { x: 1 } });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+
+        function resetWholeGame() {
+            clearInterval(currentMatchData.timerInterval);
+            tournamentState = {
+                semi1Winner: null,
+                semi1Loser: null,
+                semi2Winner: null,
+                semi2Loser: null,
+                champion: null,
+                currentMatchKey: null
+            };
+
+            document.getElementById('champion-modal').classList.add('hidden');
+            document.getElementById('match-winner-modal').classList.add('hidden');
+
+            document.getElementById('btn-play-semi1').classList.remove('hidden');
+            document.getElementById('btn-play-semi2').classList.remove('hidden');
+            document.getElementById('btn-play-semi2').disabled = true;
+            document.getElementById('btn-play-semi2').className = "w-full py-3 bg-slate-300 text-slate-500 font-game text-base md:text-lg rounded-xl shadow cursor-not-allowed";
+            
+            document.getElementById('btn-play-final').classList.add('hidden');
+            document.getElementById('final-match-display').innerText = "Menunggu Pemenang Sesi 1 & Sesi 2...";
+
+            document.getElementById('score-semi1-a').innerText = "0 Pts";
+            document.getElementById('score-semi1-b').innerText = "0 Pts";
+            document.getElementById('score-semi2-a').innerText = "0 Pts";
+            document.getElementById('score-semi2-b').innerText = "0 Pts";
+
+            switchView('view-setup');
+        }
+    </script>
+</body>
+</html>
